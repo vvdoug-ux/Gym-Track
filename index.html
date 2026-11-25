@@ -235,6 +235,10 @@
                             <input id="include-secondary-checkbox" type="checkbox" onchange="renderExercises()" class="rounded border-slate-700 bg-slate-950 text-amber-500 focus:ring-amber-500">
                             Secondary
                         </label>
+                        <label class="inline-flex items-center gap-1.5 text-[11px] font-semibold text-sky-300 cursor-pointer select-none">
+                            <input id="include-stabilizer-checkbox" type="checkbox" onchange="renderExercises()" class="rounded border-slate-700 bg-slate-950 text-sky-500 focus:ring-sky-500">
+                            Stabilizer
+                        </label>
                     </div>
                     <div class="flex items-center gap-2">
                         <div class="relative flex-1">
@@ -1016,7 +1020,7 @@
                 <div class="bg-slate-950/70 border border-slate-800 rounded-2xl p-3 space-y-2.5">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-1.5">
-                            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-300">Targeted Muscle Breakdown</span>
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-300">Muscle Breakdown</span>
                             <button type="button" onclick="openMuscleCalcInfoModal('breakdown')" title="How is this calculated?"
                                 class="text-slate-300 hover:text-white inline-flex items-center transition">
                                 <i data-lucide="help-circle" class="w-3.5 h-3.5"></i>
@@ -1185,7 +1189,7 @@
             <div class="flex items-start justify-between gap-2">
                 <div>
                     <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-brand-500/20 text-brand-300">Calculation Formula</span>
-                    <h3 id="muscle-calc-modal-title" class="text-base font-extrabold text-white mt-1">Targeted Muscle Breakdown</h3>
+                    <h3 id="muscle-calc-modal-title" class="text-base font-extrabold text-white mt-1">Muscle Breakdown</h3>
                 </div>
                 <button onclick="closeModal('muscle-calc-info-modal')" class="p-1.5 rounded-xl bg-slate-800 text-slate-300">
                     <i data-lucide="x" class="w-4 h-4"></i>
@@ -6308,7 +6312,7 @@
             const summaryEl = document.getElementById('muscle-calc-modal-summary');
             const detailsEl = document.getElementById('muscle-calc-modal-details');
             if (mode === 'breakdown') {
-                titleEl.textContent = 'Targeted Muscle Breakdown';
+                titleEl.textContent = 'Muscle Breakdown';
                 summaryEl.textContent = 'Percentages are calculated by weighting each exercise according to both its anatomical muscle role and the number of prescribed sets.';
                 detailsEl.innerHTML = `
                     <div><strong class="text-emerald-400">Primary Muscles:</strong> 3.0 points × Sets</div>
@@ -7562,6 +7566,8 @@
             if (incPrimCb) incPrimCb.checked = true;
             const incSecCb = document.getElementById('include-secondary-checkbox');
             if (incSecCb) incSecCb.checked = false;
+            const incStabCb = document.getElementById('include-stabilizer-checkbox');
+            if (incStabCb) incStabCb.checked = false;
             const showHiddenCb = document.getElementById('show-hidden-gear-checkbox');
             if (showHiddenCb) showHiddenCb.checked = false;
             const favBtn = document.getElementById('ex-fav-filter-btn');
@@ -7683,6 +7689,7 @@
             const query = (document.getElementById('exercise-search').value || '').toLowerCase().trim();
             const includePrimary = document.getElementById('include-primary-checkbox')?.checked ?? true;
             const includeSecondary = document.getElementById('include-secondary-checkbox')?.checked || false;
+            const includeStabilizer = document.getElementById('include-stabilizer-checkbox')?.checked || false;
             const avoided = getAvoidedEquipments();
             const wanted = getWantedEquipments();
 
@@ -7703,7 +7710,8 @@
                 const sup = ex.supporting || [];
                 const pool = [
                     ...(includePrimary ? prim : []),
-                    ...(includeSecondary ? [...sec, ...sup] : [])
+                    ...(includeSecondary ? sec : []),
+                    ...(includeStabilizer ? sup : [])
                 ];
 
                 if (exerciseMuscleGroupFilter !== 'All') {
@@ -8729,6 +8737,8 @@
 
             const presets = [
                 { value: 'natural', label: 'Natural Coach' },
+                { value: 'female', label: 'Female Voice' },
+                { value: 'male', label: 'Male Voice' },
                 { value: 'energetic', label: 'Energetic' },
                 { value: 'calm', label: 'Calm Guide' },
                 { value: 'deep', label: 'Deep & Steady' }
@@ -8810,11 +8820,11 @@
                 if (exact) return exact;
             }
 
-            if (voiceCoachStyle === 'deep') {
-                return pool.find(v => /guy|daniel|david|mark|alex|george|arthur|male/i.test(v.name)) || pool[0];
+            if (voiceCoachStyle === 'male' || voiceCoachStyle === 'deep') {
+                return pool.find(v => /guy|daniel|david|mark|alex|george|arthur|james|thomas|male|en-us-x-iom|en-us-x-tpd|en-gb-x-rjs|en-gb-x-gbd/i.test(v.name + ' ' + (v.voiceURI || ''))) || pool[0];
             }
-            if (voiceCoachStyle === 'calm') {
-                return pool.find(v => /samantha|serena|victoria|moira|karen|aria|fiona|female/i.test(v.name)) || pool[0];
+            if (voiceCoachStyle === 'female' || voiceCoachStyle === 'calm') {
+                return pool.find(v => /samantha|serena|victoria|moira|karen|aria|fiona|jenny|ava|allison|female|en-us-x-sfg|en-us-x-tpf|en-gb-x-gba|en-gb-x-gbc/i.test(v.name + ' ' + (v.voiceURI || ''))) || pool[0];
             }
             if (voiceCoachStyle === 'energetic') {
                 return pool.find(v => /jenny|ava|allison|google us english|natural|neural/i.test(v.name)) || pool[0];
@@ -8840,6 +8850,12 @@
                 if (isDeviceVoice) {
                     utter.rate = 1.0;
                     utter.pitch = 1.0;
+                } else if (voiceCoachStyle === 'male') {
+                    utter.rate = 0.97;
+                    utter.pitch = 0.86;
+                } else if (voiceCoachStyle === 'female') {
+                    utter.rate = 0.98;
+                    utter.pitch = 1.14;
                 } else if (voiceCoachStyle === 'energetic') {
                     utter.rate = 1.07;
                     utter.pitch = 1.12;
