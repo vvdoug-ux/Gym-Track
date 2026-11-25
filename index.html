@@ -205,13 +205,6 @@
                     </div>
 
                     <div>
-                        <label for="ex-muscle-select" class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Muscles</label>
-                        <select id="ex-muscle-select" onchange="onExerciseMuscleDropdownChange(this.value)"
-                            class="w-full bg-slate-950 border border-slate-800 rounded-xl px-2.5 py-1.5 text-xs font-semibold text-white focus:outline-none focus:border-brand-500">
-                        </select>
-                    </div>
-
-                    <div>
                         <label for="ex-difficulty-select" class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Difficulty</label>
                         <select id="ex-difficulty-select" onchange="exerciseDifficultyFilter = this.value; renderExercises();"
                             class="w-full bg-slate-950 border border-slate-800 rounded-xl px-2.5 py-1.5 text-xs font-semibold text-white focus:outline-none focus:border-brand-500">
@@ -221,12 +214,19 @@
                             <option value="Advanced">Hard</option>
                         </select>
                     </div>
+
+                    <div>
+                        <label for="ex-muscle-select" class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Muscles</label>
+                        <select id="ex-muscle-select" onchange="onExerciseMuscleDropdownChange(this.value)"
+                            class="w-full bg-slate-950 border border-slate-800 rounded-xl px-2.5 py-1.5 text-xs font-semibold text-white focus:outline-none focus:border-brand-500">
+                        </select>
+                    </div>
                 </div>
 
-                <!-- Typeable Specific Muscle Combobox + Primary & Secondary Toggles -->
+                <!-- Typeable Muscle Combobox + Primary & Secondary Toggles -->
                 <div class="relative pt-0.5" id="specific-muscle-filter-wrapper">
                     <div class="flex flex-wrap items-center gap-3 mb-1">
-                        <label for="specific-muscle-input" class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Specific Muscle</label>
+                        <label for="specific-muscle-input" class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Muscle</label>
                         <label class="inline-flex items-center gap-1.5 text-[11px] font-semibold text-emerald-300 cursor-pointer select-none">
                             <input id="include-primary-checkbox" type="checkbox" checked onchange="renderExercises()" class="rounded border-slate-700 bg-slate-950 text-emerald-500 focus:ring-emerald-500">
                             Primary
@@ -241,7 +241,7 @@
                             <input id="specific-muscle-input" type="text" autocomplete="off"
                                 onfocus="openSpecificMuscleDropdown()"
                                 oninput="onSpecificMuscleInput(this.value)"
-                                placeholder="Type or select a specific muscle..."
+                                placeholder="Type or select a muscle..."
                                 class="w-full bg-slate-950 border border-slate-800 rounded-xl pl-3 pr-8 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-brand-500">
                             <button type="button" onclick="clearSpecificMuscle()" id="clear-sm-btn" class="hidden absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 p-1">
                                 <i data-lucide="x" class="w-3.5 h-3.5"></i>
@@ -249,8 +249,8 @@
                             <div id="specific-muscle-dropdown" class="hidden absolute left-0 right-0 mt-1 max-h-56 overflow-y-auto bg-slate-900 border border-slate-700 rounded-xl shadow-2xl z-20 p-1"></div>
                         </div>
                         <div class="flex items-center gap-1 bg-slate-950 p-1 rounded-xl shrink-0">
-                            <button type="button" onclick="setSpecificMuscleSort('alpha')" id="sort-sm-alpha" class="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-brand-600 text-white">A–Z</button>
-                            <button type="button" onclick="setSpecificMuscleSort('subgroup')" id="sort-sm-subgroup" class="px-2 py-0.5 rounded-lg text-[10px] font-bold text-slate-400">Categorized</button>
+                            <button type="button" onclick="setSpecificMuscleSort('alpha')" id="sort-sm-alpha" class="px-2 py-0.5 rounded-lg text-[10px] font-bold text-slate-400">A–Z</button>
+                            <button type="button" onclick="setSpecificMuscleSort('subgroup')" id="sort-sm-subgroup" class="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-brand-600 text-white">Categorized</button>
                         </div>
                     </div>
                 </div>
@@ -495,13 +495,14 @@
 
             <!-- Running Workout Container -->
             <div id="active-session-container" class="hidden space-y-4">
+                <!-- Active Session Control Header -->
                 <div class="bg-slate-900 border border-slate-800 rounded-2xl p-3.5 space-y-3">
                     <div class="flex items-start justify-between gap-2">
                         <div class="flex-1 min-w-0">
                             <h2 id="active-workout-title" class="text-base font-extrabold text-white truncate">Custom Workout</h2>
                             <div class="flex flex-wrap items-center gap-2 mt-1">
                                 <span id="workout-timer-display" class="font-mono text-sm font-bold text-emerald-400">00:00</span>
-                                <span id="workout-paused-badge" class="hidden text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300">Paused</span>
+                                <span id="workout-paused-badge" class="hidden text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-amber-500/20 text-amber-300">Paused</span>
                                 <button id="active-structure-badge" type="button" onclick="openStructureInfoModal(activeWorkout?.structure || 'Straight Sets')"
                                     class="text-[10px] font-bold uppercase px-2.5 py-0.5 rounded-full bg-purple-500/20 text-purple-300 inline-flex items-center gap-1 transition">
                                     <span>Straight Sets</span>
@@ -511,12 +512,12 @@
                             </div>
                         </div>
                         <div class="flex items-center gap-1.5 shrink-0">
-                            <button onclick="cancelWorkout()" title="Discard Workout"
-                                class="w-8 h-8 rounded-xl bg-rose-950/70 text-rose-400 flex items-center justify-center transition">
+                            <button onclick="cancelWorkout()" title="Discard Session"
+                                class="w-7 h-7 rounded-lg bg-rose-950/70 text-rose-400 flex items-center justify-center transition">
                                 <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
                             </button>
                             <button id="pause-timer-btn" onclick="toggleWorkoutPause()" title="Pause / Resume Timer"
-                                class="w-8 h-8 rounded-xl bg-slate-800 text-amber-300 flex items-center justify-center transition">
+                                class="w-8 h-7 rounded-lg bg-slate-800 text-amber-300 text-xs font-bold flex items-center justify-center transition">
                                 <i data-lucide="pause" class="w-3.5 h-3.5"></i>
                             </button>
                             <button onclick="finishWorkout()"
@@ -526,12 +527,11 @@
                         </div>
                     </div>
 
-                    <!-- Single-Row Controls: Left (Current/Full + 2-in-1 Auto-Next) | Center (Voice + Callouts) | Right (Flow + Breath + Interval) -->
-                    <div class="flex flex-wrap items-center justify-between pt-2 border-t border-slate-800/80 gap-2">
-                        <!-- Left Group: Current/Full Toggle + 2-in-1 Auto-Next -->
+                    <!-- Row 1: Left (Fixed-Width Current/Full + 2-in-1 Auto-Next) | Right (Flow + Breath + Interval) -->
+                    <div class="flex items-center justify-between pt-2 border-t border-slate-800/80 gap-2">
                         <div class="flex items-center gap-1.5">
                             <button id="full-view-toggle-btn" type="button" onclick="toggleFullViewMode()"
-                                class="px-2.5 py-1.5 rounded-full bg-slate-950 text-slate-300 text-[11px] font-bold transition">
+                                class="w-[72px] py-1.5 rounded-full bg-slate-950 text-slate-300 text-[11px] font-bold text-center transition">
                                 Current
                             </button>
                             <div id="auto-advance-wrapper" class="relative inline-flex items-center bg-slate-950 rounded-full overflow-visible">
@@ -564,37 +564,7 @@
                             </div>
                         </div>
 
-                        <!-- Center Group: Unified 2-in-1 Voice Coach Pill & Unified 2-in-1 Time Callouts Pill -->
-                        <div class="flex items-center justify-center gap-1.5 mx-auto">
-                            <div id="voice-coach-wrapper" class="relative inline-flex items-center bg-slate-950 rounded-full overflow-visible">
-                                <button id="voice-coach-btn" type="button" onclick="toggleVoiceCoach()" title="Toggle Voice Coach"
-                                    class="pl-2.5 pr-1.5 py-1.5 text-[11px] font-bold text-slate-400 flex items-center justify-center transition">
-                                    <i data-lucide="volume-x" class="w-3.5 h-3.5"></i>
-                                </button>
-                                <button id="voice-coach-style-btn" type="button" onclick="toggleVoiceStyleMenu()" title="Voice Coach Sound"
-                                    class="pr-2.5 pl-1 py-1.5 text-[11px] font-bold text-slate-300 max-w-[115px] truncate transition">
-                                    <span id="voice-coach-style-label">Natural Coach</span>
-                                </button>
-                                <div id="voice-coach-menu" class="hidden absolute left-0 top-full mt-1.5 w-44 max-h-56 overflow-y-auto bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl z-30 p-1 space-y-0.5"></div>
-                            </div>
-
-                            <div id="time-callout-wrapper" class="relative inline-flex items-center overflow-visible">
-                                <div id="time-callout-pill" class="inline-flex items-center bg-slate-950 rounded-full overflow-hidden transition">
-                                    <button id="time-callout-toggle-btn" type="button" onclick="toggleTimeCalloutOnOff()" title="Time Callouts"
-                                        class="pl-2.5 pr-1.5 py-1.5 text-slate-400 flex items-center justify-center transition">
-                                        <i data-lucide="alarm-clock" class="w-3.5 h-3.5"></i>
-                                    </button>
-                                    <button id="time-callout-select-btn" type="button" onclick="toggleTimeCalloutMenu()" title="Time Callouts Interval"
-                                        class="pr-2.5 pl-1 py-1.5 text-[11px] font-bold text-slate-300 transition">
-                                        <span id="time-callout-label">Off</span>
-                                    </button>
-                                </div>
-                                <div id="time-callout-menu" class="hidden right-0 top-full mt-1.5 w-32 bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl z-30 p-1 space-y-0.5 absolute"></div>
-                            </div>
-                        </div>
-
-                        <!-- Right Group: Icon-Only Flow Mode, Breath Timer & Interval Timer -->
-                        <div class="flex items-center gap-1.5 ml-auto sm:ml-0">
+                        <div class="flex items-center gap-1.5">
                             <button id="toggle-yoga-flow-btn" type="button" onclick="toggleYogaFlowMode()" title="Flow Mode"
                                 class="p-2 rounded-full bg-teal-950/60 text-teal-200 flex items-center justify-center transition">
                                 <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
@@ -610,97 +580,33 @@
                         </div>
                     </div>
 
-                    <!-- Guided Breath Timer Panel -->
-                    <div id="breath-timer-panel" class="hidden bg-slate-950 border border-slate-800 rounded-2xl p-3 space-y-2.5">
-                        <div class="flex flex-wrap items-center justify-between gap-2">
-                            <div class="flex items-center gap-2">
-                                <span class="text-xs font-extrabold text-cyan-300">Guided Breath Timer</span>
-                                <span id="breath-phase-label" class="text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-200">READY</span>
-                            </div>
-                            <div class="flex flex-wrap gap-1">
-                                <button type="button" onclick="applyBreathPreset('box')" class="px-2 py-0.5 rounded-lg bg-slate-900 text-[10px] font-bold text-slate-300">Box 4-4-4-4</button>
-                                <button type="button" onclick="applyBreathPreset('coherent')" class="px-2 py-0.5 rounded-lg bg-slate-900 text-[10px] font-bold text-slate-300">Coherent 5-5</button>
-                                <button type="button" onclick="applyBreathPreset('relax')" class="px-2 py-0.5 rounded-lg bg-slate-900 text-[10px] font-bold text-slate-300">Calm 4-7-8</button>
-                                <button type="button" onclick="applyBreathPreset('flow')" class="px-2 py-0.5 rounded-lg bg-slate-900 text-[10px] font-bold text-slate-300">Flow 4-2-6</button>
-                            </div>
+                    <!-- Row 2: Left-Aligned Voice Coach & Time Callouts -->
+                    <div class="flex flex-wrap items-center justify-start gap-1.5">
+                        <div id="voice-coach-wrapper" class="relative inline-flex items-center bg-slate-950 rounded-full overflow-visible">
+                            <button id="voice-coach-btn" type="button" onclick="toggleVoiceCoach()" title="Toggle Voice Coach"
+                                class="pl-2.5 pr-1.5 py-1.5 text-[11px] font-bold text-slate-400 flex items-center justify-center transition">
+                                <i data-lucide="volume-x" class="w-3.5 h-3.5"></i>
+                            </button>
+                            <button id="voice-coach-style-btn" type="button" onclick="toggleVoiceStyleMenu()" title="Voice Coach Sound"
+                                class="pr-2.5 pl-1 py-1.5 text-[11px] font-bold text-slate-300 max-w-[125px] truncate transition">
+                                <span id="voice-coach-style-label">Natural Coach</span>
+                            </button>
+                            <div id="voice-coach-menu" class="hidden absolute left-0 top-full mt-1.5 w-44 max-h-56 overflow-y-auto bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl z-30 p-1 space-y-0.5"></div>
                         </div>
 
-                        <div class="flex items-center justify-between gap-3 bg-slate-900/90 rounded-xl p-2.5">
-                            <div class="flex items-center gap-3">
-                                <div id="breath-orb" class="w-14 h-14 rounded-full bg-cyan-500/20 border-2 border-cyan-400 flex items-center justify-center transition-all duration-700">
-                                    <span id="breath-countdown" class="font-mono text-lg font-extrabold text-white">4</span>
-                                </div>
-                                <div>
-                                    <p id="breath-cycle-label" class="text-[11px] font-bold text-slate-300">Cycle 0 • 4s Inhale / 4s Hold / 4s Exhale / 4s Hold</p>
-                                </div>
-                            </div>
-                            <div class="flex items-stretch gap-1.5 shrink-0">
-                                <button id="breath-start-btn" type="button" onclick="toggleBreathRun()"
-                                    class="px-3.5 py-2 rounded-xl bg-cyan-600 text-white text-xs font-extrabold flex items-center gap-1">
-                                    <i data-lucide="play" class="w-3.5 h-3.5"></i> Breathe
+                        <div id="time-callout-wrapper" class="relative inline-flex items-center overflow-visible">
+                            <div id="time-callout-pill" class="inline-flex items-center bg-slate-950 rounded-full overflow-hidden transition">
+                                <button id="time-callout-toggle-btn" type="button" onclick="toggleTimeCalloutOnOff()" title="Time Callouts"
+                                    class="pl-2.5 pr-1.5 py-1.5 text-slate-400 flex items-center justify-center transition">
+                                    <i data-lucide="alarm-clock" class="w-3.5 h-3.5"></i>
                                 </button>
-                                <button type="button" onclick="resetBreathTimer()"
-                                    class="px-3 py-2 rounded-xl bg-slate-800 text-slate-300 text-xs font-bold flex items-center justify-center">
-                                    Reset
+                                <button id="time-callout-select-btn" type="button" onclick="toggleTimeCalloutMenu()" title="Time Callouts Interval"
+                                    class="pr-2.5 pl-1 py-1.5 text-[11px] font-bold text-slate-300 transition">
+                                    <span id="time-callout-label">Off</span>
                                 </button>
                             </div>
+                            <div id="time-callout-menu" class="hidden left-0 top-full mt-1.5 w-32 bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl z-30 p-1 space-y-0.5 absolute"></div>
                         </div>
-                    </div>
-
-                    <!-- Interval Timer Panel -->
-                    <div id="tabata-timer-panel" class="hidden bg-slate-950 border border-slate-800 rounded-2xl p-3 space-y-2.5">
-                        <div class="flex flex-wrap items-center justify-between gap-2">
-                            <div class="flex items-center gap-2">
-                                <span id="tabata-phase-badge" class="text-[11px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-purple-500/20 text-purple-300">READY</span>
-                                <span id="tabata-round-label" class="text-xs font-bold text-slate-300">Round 1 of 8</span>
-                            </div>
-                            <div class="flex flex-wrap gap-1">
-                                <button type="button" onclick="applyTabataPreset(20, 10)" class="px-2 py-0.5 rounded-lg bg-slate-900 text-[10px] font-bold text-slate-300">Tabata 20/10</button>
-                                <button type="button" onclick="applyTabataPreset(30, 15)" class="px-2 py-0.5 rounded-lg bg-slate-900 text-[10px] font-bold text-slate-300">HIIT 30/15</button>
-                                <button type="button" onclick="applyTabataPreset(45, 15)" class="px-2 py-0.5 rounded-lg bg-slate-900 text-[10px] font-bold text-slate-300">EMOM 45/15</button>
-                                <button type="button" onclick="applyTabataPreset(40, 20)" class="px-2 py-0.5 rounded-lg bg-slate-900 text-[10px] font-bold text-slate-300">Circuit 40/20</button>
-                            </div>
-                        </div>
-
-                        <div class="flex items-center justify-between gap-3 bg-slate-900/90 rounded-xl px-3 py-2">
-                            <div>
-                                <div id="tabata-clock-display" class="font-mono text-2xl font-extrabold text-white tracking-tight">00:20</div>
-                                <p id="tabata-next-exercise-hint" class="text-[10px] text-slate-400 truncate max-w-[200px] sm:max-w-xs"></p>
-                            </div>
-                            <div class="flex items-stretch gap-1.5">
-                                <button id="tabata-start-btn" type="button" onclick="toggleTabataRun()"
-                                    class="px-3.5 py-2 rounded-xl bg-purple-600 text-white text-xs font-extrabold flex items-center gap-1">
-                                    <i data-lucide="play" class="w-3.5 h-3.5"></i> Start
-                                </button>
-                                <button type="button" onclick="resetTabataTimer()"
-                                    class="px-3 py-2 rounded-xl bg-slate-800 text-slate-300 text-xs font-bold flex items-center justify-center">
-                                    Reset
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-3 gap-2 text-xs">
-                            <div class="bg-slate-900/80 rounded-xl p-2">
-                                <label class="block text-[10px] font-bold uppercase text-slate-400">Work (sec)</label>
-                                <input id="tabata-work-input" type="number" min="5" max="600" value="20" onchange="updateTabataConfig()"
-                                    class="w-full bg-slate-950 rounded-lg px-2 py-1 mt-1 text-white font-bold text-center focus:outline-none">
-                            </div>
-                            <div class="bg-slate-900/80 rounded-xl p-2">
-                                <label class="block text-[10px] font-bold uppercase text-slate-400">Rest (sec)</label>
-                                <input id="tabata-rest-input" type="number" min="0" max="300" value="10" onchange="updateTabataConfig()"
-                                    class="w-full bg-slate-950 rounded-lg px-2 py-1 mt-1 text-white font-bold text-center focus:outline-none">
-                            </div>
-                            <div class="bg-slate-900/80 rounded-xl p-2">
-                                <label class="block text-[10px] font-bold uppercase text-slate-400">Rounds</label>
-                                <input id="tabata-rounds-input" type="number" min="1" max="50" value="8" onchange="updateTabataConfig()"
-                                    class="w-full bg-slate-950 rounded-lg px-2 py-1 mt-1 text-white font-bold text-center focus:outline-none">
-                            </div>
-                        </div>
-
-                        <label class="inline-flex items-center gap-2 text-[11px] font-semibold text-slate-300 cursor-pointer select-none">
-                            <input id="tabata-auto-switch-ex" type="checkbox" checked class="rounded border-slate-700 bg-slate-950 text-purple-500 focus:ring-purple-500">
-                            Switch to next exercise &amp; log set after each round
-                        </label>
                     </div>
 
                     <!-- Overall Routine Percent Complete Progress Bar (Full-Width Row) -->
@@ -722,51 +628,182 @@
                     </div>
                 </div>
 
-                <!-- Guided Flow Stage -->
-                <div id="yoga-flow-stage" class="hidden bg-gradient-to-b from-teal-950/50 to-slate-900 border border-teal-800/50 rounded-2xl p-4 space-y-3.5">
-                    <div class="flex items-start justify-between gap-2">
-                        <div>
-                            <div class="flex items-center gap-1.5">
-                                <span title="Flow Mode" class="text-teal-300 inline-flex items-center">
-                                    <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                <!-- Rearrangeable Active Workout Cards Stack (Flow Mode, Breath Timer, Interval Timer, Exercises) -->
+                <div id="active-cards-stack" class="space-y-3">
+                    <!-- Guided Breath Timer Card -->
+                    <div id="breath-timer-panel" data-card-id="breath" draggable="true"
+                        ondragstart="onActiveCardDragStart(event, 'breath')"
+                        ondragover="onActiveCardDragOver(event)"
+                        ondragleave="onActiveCardDragLeave(event)"
+                        ondrop="onActiveCardDrop(event, 'breath')"
+                        class="hidden bg-slate-900 border border-slate-800 rounded-2xl p-3.5 space-y-2.5 transition">
+                        <div class="flex flex-wrap items-center justify-between gap-2">
+                            <div class="flex items-center gap-2">
+                                <span class="text-slate-500 cursor-grab active:cursor-grabbing" title="Drag to reorder card">
+                                    <i data-lucide="grip-vertical" class="w-4 h-4"></i>
                                 </span>
-                                <span id="yoga-pose-counter" class="text-[11px] font-semibold text-slate-400">Movement 1 of 1</span>
-                                <span id="yoga-side-badge" class="hidden text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300">Side 1</span>
+                                <span class="w-7 h-7 rounded-full bg-cyan-500/20 text-cyan-300 flex items-center justify-center" title="Breath Timer">
+                                    <i data-lucide="wind" class="w-3.5 h-3.5"></i>
+                                </span>
+                                <span id="breath-phase-label" class="hidden text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-200"></span>
                             </div>
-                            <h3 id="yoga-pose-title" class="text-base font-extrabold text-white mt-1">Mountain Pose</h3>
+                            <div class="flex flex-wrap gap-1">
+                                <button type="button" onclick="applyBreathPreset('box')" class="px-2 py-0.5 rounded-lg bg-slate-950 text-[10px] font-bold text-slate-300">Box 4-4-4-4</button>
+                                <button type="button" onclick="applyBreathPreset('coherent')" class="px-2 py-0.5 rounded-lg bg-slate-950 text-[10px] font-bold text-slate-300">Coherent 5-5</button>
+                                <button type="button" onclick="applyBreathPreset('relax')" class="px-2 py-0.5 rounded-lg bg-slate-950 text-[10px] font-bold text-slate-300">Calm 4-7-8</button>
+                                <button type="button" onclick="applyBreathPreset('flow')" class="px-2 py-0.5 rounded-lg bg-slate-950 text-[10px] font-bold text-slate-300">Flow 4-2-6</button>
+                            </div>
                         </div>
-                        <button type="button" onclick="toggleYogaFlowMode()" title="Exit Flow Mode"
-                            class="p-1.5 rounded-lg bg-slate-800 text-slate-300 flex items-center justify-center">
-                            <i data-lucide="x" class="w-3.5 h-3.5"></i>
-                        </button>
+
+                        <div class="flex items-center justify-between gap-3 bg-slate-950/90 rounded-xl p-2.5">
+                            <div class="flex items-center gap-3">
+                                <div id="breath-orb" class="w-14 h-14 rounded-full bg-cyan-500/20 border-2 border-cyan-400 flex items-center justify-center transition-all duration-700">
+                                    <span id="breath-countdown" class="font-mono text-lg font-extrabold text-white">4</span>
+                                </div>
+                                <div>
+                                    <p id="breath-cycle-label" class="text-[11px] font-bold text-slate-300">Cycle 0 • 4s Inhale / 4s Hold / 4s Exhale / 4s Hold</p>
+                                </div>
+                            </div>
+                            <div class="flex items-stretch gap-1.5 shrink-0">
+                                <button id="breath-start-btn" type="button" onclick="toggleBreathRun()" title="Start / Pause Breath Timer"
+                                    class="w-10 h-9 rounded-xl bg-cyan-600 text-white text-xs font-extrabold flex items-center justify-center">
+                                    <i data-lucide="play" class="w-4 h-4"></i>
+                                </button>
+                                <button type="button" onclick="resetBreathTimer()"
+                                    class="px-3 h-9 rounded-xl bg-slate-800 text-slate-300 text-xs font-bold flex items-center justify-center">
+                                    Reset
+                                </button>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="bg-slate-950/90 rounded-2xl p-3.5 flex items-center justify-between gap-3">
-                        <div>
-                            <p class="text-[10px] font-bold uppercase tracking-wider text-teal-400">Hold Countdown</p>
-                            <div id="yoga-hold-clock" class="font-mono text-3xl font-extrabold text-white mt-0.5">00:45</div>
+                    <!-- Interval Timer Card -->
+                    <div id="tabata-timer-panel" data-card-id="interval" draggable="true"
+                        ondragstart="onActiveCardDragStart(event, 'interval')"
+                        ondragover="onActiveCardDragOver(event)"
+                        ondragleave="onActiveCardDragLeave(event)"
+                        ondrop="onActiveCardDrop(event, 'interval')"
+                        class="hidden bg-slate-900 border border-slate-800 rounded-2xl p-3.5 space-y-2.5 transition">
+                        <div class="flex flex-wrap items-center justify-between gap-2">
+                            <div class="flex items-center gap-2">
+                                <span class="text-slate-500 cursor-grab active:cursor-grabbing" title="Drag to reorder card">
+                                    <i data-lucide="grip-vertical" class="w-4 h-4"></i>
+                                </span>
+                                <span id="tabata-phase-badge" class="w-7 h-7 rounded-full bg-purple-500/20 text-purple-300 inline-flex items-center justify-center" title="Interval Timer">
+                                    <i data-lucide="repeat" class="w-3.5 h-3.5"></i>
+                                </span>
+                                <span id="tabata-round-label" class="text-xs font-bold text-slate-300">Round 1 of 8</span>
+                            </div>
+                            <div class="flex flex-wrap gap-1">
+                                <button type="button" onclick="applyTabataPreset(20, 10)" class="px-2 py-0.5 rounded-lg bg-slate-950 text-[10px] font-bold text-slate-300">Tabata 20/10</button>
+                                <button type="button" onclick="applyTabataPreset(30, 15)" class="px-2 py-0.5 rounded-lg bg-slate-950 text-[10px] font-bold text-slate-300">HIIT 30/15</button>
+                                <button type="button" onclick="applyTabataPreset(45, 15)" class="px-2 py-0.5 rounded-lg bg-slate-950 text-[10px] font-bold text-slate-300">EMOM 45/15</button>
+                                <button type="button" onclick="applyTabataPreset(40, 20)" class="px-2 py-0.5 rounded-lg bg-slate-950 text-[10px] font-bold text-slate-300">Circuit 40/20</button>
+                            </div>
                         </div>
-                        <div class="flex items-center gap-2">
-                            <button id="yoga-timer-toggle-btn" type="button" onclick="toggleYogaHoldTimer()"
-                                class="px-4 py-2.5 rounded-xl bg-teal-600 text-white text-xs font-extrabold flex items-center gap-1.5">
-                                <i data-lucide="play" class="w-3.5 h-3.5"></i> Hold
+
+                        <div class="flex items-center justify-between gap-3 bg-slate-950/90 rounded-xl px-3 py-2">
+                            <div>
+                                <div id="tabata-clock-display" class="font-mono text-2xl font-extrabold text-white tracking-tight">00:20</div>
+                                <p id="tabata-next-exercise-hint" class="text-[10px] text-slate-400 truncate max-w-[200px] sm:max-w-xs"></p>
+                            </div>
+                            <div class="flex items-stretch gap-1.5">
+                                <button id="tabata-start-btn" type="button" onclick="toggleTabataRun()" title="Start / Pause Interval Timer"
+                                    class="w-10 h-9 rounded-xl bg-purple-600 text-white text-xs font-extrabold flex items-center justify-center">
+                                    <i data-lucide="play" class="w-4 h-4"></i>
+                                </button>
+                                <button type="button" onclick="resetTabataTimer()"
+                                    class="px-3 h-9 rounded-xl bg-slate-800 text-slate-300 text-xs font-bold flex items-center justify-center">
+                                    Reset
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-3 gap-2 text-xs">
+                            <div class="bg-slate-950/80 rounded-xl p-2">
+                                <label class="block text-[10px] font-bold uppercase text-slate-400">Work (sec)</label>
+                                <input id="tabata-work-input" type="number" min="5" max="600" value="20" onchange="updateTabataConfig()"
+                                    class="w-full bg-slate-900 rounded-lg px-2 py-1 mt-1 text-white font-bold text-center focus:outline-none">
+                            </div>
+                            <div class="bg-slate-950/80 rounded-xl p-2">
+                                <label class="block text-[10px] font-bold uppercase text-slate-400">Rest (sec)</label>
+                                <input id="tabata-rest-input" type="number" min="0" max="300" value="10" onchange="updateTabataConfig()"
+                                    class="w-full bg-slate-900 rounded-lg px-2 py-1 mt-1 text-white font-bold text-center focus:outline-none">
+                            </div>
+                            <div class="bg-slate-950/80 rounded-xl p-2">
+                                <label class="block text-[10px] font-bold uppercase text-slate-400">Rounds</label>
+                                <input id="tabata-rounds-input" type="number" min="1" max="50" value="8" onchange="updateTabataConfig()"
+                                    class="w-full bg-slate-900 rounded-lg px-2 py-1 mt-1 text-white font-bold text-center focus:outline-none">
+                            </div>
+                        </div>
+
+                        <label class="inline-flex items-center gap-2 text-[11px] font-semibold text-slate-300 cursor-pointer select-none">
+                            <input id="tabata-auto-switch-ex" type="checkbox" checked class="rounded border-slate-700 bg-slate-950 text-purple-500 focus:ring-purple-500">
+                            Switch to next exercise &amp; log set after each round
+                        </label>
+                    </div>
+
+                    <!-- Guided Flow Stage Card -->
+                    <div id="yoga-flow-stage" data-card-id="flow" draggable="true"
+                        ondragstart="onActiveCardDragStart(event, 'flow')"
+                        ondragover="onActiveCardDragOver(event)"
+                        ondragleave="onActiveCardDragLeave(event)"
+                        ondrop="onActiveCardDrop(event, 'flow')"
+                        class="hidden bg-gradient-to-b from-teal-950/50 to-slate-900 border border-teal-800/50 rounded-2xl p-4 space-y-3.5 transition">
+                        <div class="flex items-start justify-between gap-2">
+                            <div class="flex items-start gap-2">
+                                <span class="text-slate-500 cursor-grab active:cursor-grabbing mt-0.5" title="Drag to reorder card">
+                                    <i data-lucide="grip-vertical" class="w-4 h-4"></i>
+                                </span>
+                                <div>
+                                    <div class="flex items-center gap-1.5">
+                                        <span title="Flow Mode" class="text-teal-300 inline-flex items-center">
+                                            <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                                        </span>
+                                        <span id="yoga-pose-counter" class="text-[11px] font-semibold text-slate-400">Movement 1 of 1</span>
+                                        <span id="yoga-side-badge" class="hidden text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300">Side 1</span>
+                                    </div>
+                                    <h3 id="yoga-pose-title" class="text-base font-extrabold text-white mt-1">Mountain Pose</h3>
+                                </div>
+                            </div>
+                            <button type="button" onclick="toggleYogaFlowMode()" title="Exit Flow Mode"
+                                class="p-1.5 rounded-lg bg-slate-800 text-slate-300 flex items-center justify-center">
+                                <i data-lucide="x" class="w-3.5 h-3.5"></i>
                             </button>
-                            <button type="button" onclick="completeCurrentYogaPose()"
-                                class="px-3.5 py-2.5 rounded-xl bg-emerald-600 text-white text-xs font-extrabold flex items-center gap-1">
-                                <i data-lucide="check" class="w-3.5 h-3.5"></i> Next
-                            </button>
+                        </div>
+
+                        <div class="bg-slate-950/90 rounded-2xl p-3.5 flex items-center justify-between gap-3">
+                            <div>
+                                <p class="text-[10px] font-bold uppercase tracking-wider text-teal-400">Hold Countdown</p>
+                                <div id="yoga-hold-clock" class="font-mono text-3xl font-extrabold text-white mt-0.5">00:45</div>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button id="yoga-timer-toggle-btn" type="button" onclick="toggleYogaHoldTimer()" title="Start / Pause Flow Hold"
+                                    class="w-11 h-10 rounded-xl bg-teal-600 text-white text-xs font-extrabold flex items-center justify-center">
+                                    <i data-lucide="play" class="w-4 h-4"></i>
+                                </button>
+                                <button type="button" onclick="completeCurrentYogaPose()"
+                                    class="px-3.5 h-10 rounded-xl bg-emerald-600 text-white text-xs font-extrabold flex items-center gap-1">
+                                    <i data-lucide="check" class="w-3.5 h-3.5"></i> Next
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-950/70 rounded-xl p-3 space-y-1.5">
+                            <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Alignment &amp; Breath Cues</p>
+                            <ol id="yoga-pose-steps" class="space-y-1.5 text-xs text-slate-200 list-decimal list-inside"></ol>
+                            <p id="yoga-pose-cue" class="text-[11px] text-teal-300 font-semibold pt-1"></p>
                         </div>
                     </div>
 
-                    <div class="bg-slate-950/70 rounded-xl p-3 space-y-1.5">
-                        <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Alignment &amp; Breath Cues</p>
-                        <ol id="yoga-pose-steps" class="space-y-1.5 text-xs text-slate-200 list-decimal list-inside"></ol>
-                        <p id="yoga-pose-cue" class="text-[11px] text-teal-300 font-semibold pt-1"></p>
-                    </div>
+                    <!-- Active Exercises List -->
+                    <div id="active-exercises-list" data-card-id="exercises" draggable="true"
+                        ondragstart="onActiveCardDragStart(event, 'exercises')"
+                        ondragover="onActiveCardDragOver(event)"
+                        ondragleave="onActiveCardDragLeave(event)"
+                        ondrop="onActiveCardDrop(event, 'exercises')"
+                        class="space-y-3 transition"></div>
                 </div>
-
-                <!-- Active Exercises List -->
-                <div id="active-exercises-list" class="space-y-3"></div>
 
                 <!-- Add Exercise to Active Session -->
                 <button onclick="openExercisePicker('active')"
@@ -1211,27 +1248,55 @@
         </div>
     </div>
 
-    <!-- MODAL 10: UNILATERAL MOVEMENT INFO -->
+    <!-- MODAL 10: UNILATERAL MOVEMENT EXPLAINER -->
     <div id="unilateral-info-modal" class="hidden fixed inset-0 z-[70] bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-slate-800 w-full max-w-md rounded-3xl p-4 space-y-3 shadow-2xl">
+        <div class="bg-slate-900 border border-slate-800 w-full max-w-sm rounded-3xl p-4 space-y-3 shadow-2xl">
             <div class="flex items-start justify-between gap-2">
                 <div>
                     <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-teal-500/20 text-teal-300">Movement Type</span>
                     <h3 class="text-base font-extrabold text-white mt-1">Unilateral Movement</h3>
                 </div>
-                <button onclick="closeModal('unilateral-info-modal')" class="p-1.5 rounded-xl bg-slate-800 text-slate-300">
+                <button type="button" onclick="closeModal('unilateral-info-modal')" class="p-1.5 rounded-xl bg-slate-800 text-slate-300">
                     <i data-lucide="x" class="w-4 h-4"></i>
                 </button>
             </div>
             <p class="text-xs text-slate-200 leading-relaxed">
-                A unilateral exercise trains one side (arm or leg) of the body at a time, such as Single-Arm Rows, Bulgarian Split Squats, Warrior II, or Side Planks.
+                A <strong class="text-teal-300">Unilateral</strong> exercise trains one arm or one leg at a time (such as single-arm rows, split squats, or side planks).
             </p>
-            <div class="bg-slate-950 border border-slate-800 rounded-2xl p-3 text-xs text-slate-300">
-                <strong class="text-teal-300">How Flow Mode Uses This:</strong> When performing a unilateral movement in Flow Mode, the timer automatically chimes and announces <em>"Halfway. Switch sides smoothly."</em> at the midpoint of the hold duration.
-            </div>
-            <button onclick="closeModal('unilateral-info-modal')" class="w-full py-2.5 rounded-xl bg-brand-600 hover:bg-brand-500 text-xs font-extrabold text-white">
+            <p class="text-xs text-slate-400 leading-relaxed">
+                When enabled, <strong class="text-white">Flow Mode</strong> will automatically chime and prompt you to switch sides at the halfway point of each timed hold.
+            </p>
+            <button type="button" onclick="closeModal('unilateral-info-modal')" class="w-full py-2.5 rounded-xl bg-brand-600 text-xs font-extrabold text-white">
                 Got It
             </button>
+        </div>
+    </div>
+
+    <!-- MODAL 11: CONFIRMATION DIALOG -->
+    <div id="confirm-action-modal" class="hidden fixed inset-0 z-[75] bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 w-full max-w-sm rounded-3xl p-4 space-y-3.5 shadow-2xl">
+            <div class="flex items-start justify-between gap-2">
+                <div class="flex items-center gap-2">
+                    <span class="w-8 h-8 rounded-xl bg-rose-950/80 text-rose-400 flex items-center justify-center shrink-0">
+                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                    </span>
+                    <h3 id="confirm-modal-title" class="text-sm font-extrabold text-white">Are you sure?</h3>
+                </div>
+                <button type="button" onclick="closeConfirmDialog()" class="p-1.5 rounded-xl bg-slate-800 text-slate-300">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+            <p id="confirm-modal-message" class="text-xs text-slate-300 leading-relaxed"></p>
+            <div class="flex items-center gap-2 pt-1">
+                <button type="button" onclick="closeConfirmDialog()"
+                    class="flex-1 py-2.5 rounded-xl bg-slate-800 text-xs font-bold text-slate-300">
+                    Cancel
+                </button>
+                <button id="confirm-modal-accept-btn" type="button" onclick="executeConfirmedAction()"
+                    class="flex-1 py-2.5 rounded-xl bg-rose-600 text-xs font-extrabold text-white">
+                    Delete
+                </button>
+            </div>
         </div>
     </div>
 
@@ -5910,7 +5975,7 @@
         let exerciseMuscleGroupFilter = 'All';
         let exerciseSubgroupFilter = 'All';
         let specificMuscleFilter = '';
-        let specificMuscleSortMode = 'alpha';
+        let specificMuscleSortMode = 'subgroup';
         let exerciseFavoritesOnly = false;
 
         // Active Workout State
@@ -5931,6 +5996,10 @@
         let prCreationCounter = 0;
         let progressSectionCollapsed = { balance: true, history: true };
         let previewState = null;
+        let activeCardOrder = ['flow', 'breath', 'interval', 'exercises'];
+        let draggedActiveCardId = null;
+        let draggedActiveExerciseIdx = null;
+        let pendingConfirmAction = null;
 
         // Flow Mode & Guided Breath Timer State
         let yogaFlowMode = false;
@@ -6138,9 +6207,12 @@
                 window.speechSynthesis.cancel();
                 const utter = new SpeechSynthesisUtterance(text);
                 const voice = getPreferredNaturalVoice();
-                if (voice) utter.voice = voice;
+                if (voice) {
+                    utter.voice = voice;
+                    utter.lang = voice.lang || 'en-US';
+                }
                 utter.rate = 1.0;
-                utter.pitch = 1.02;
+                utter.pitch = 1.0;
                 window.speechSynthesis.speak(utter);
             } catch (e) {}
         }
@@ -6166,7 +6238,7 @@
                 'routine-preview-modal', 'exercise-detail-modal', 'progression-branch-modal',
                 'exercise-picker-modal', 'edit-history-modal', 'structure-info-modal',
                 'all-structures-info-modal', 'muscle-calc-info-modal', 'equipment-prefs-modal',
-                'unilateral-info-modal'
+                'unilateral-info-modal', 'confirm-action-modal'
             ].some(mId => {
                 const el = document.getElementById(mId);
                 return el && !el.classList.contains('hidden');
@@ -6174,6 +6246,28 @@
             if (!anyOpen) {
                 document.body.classList.remove('modal-open');
             }
+        }
+
+        function openConfirmDialog({ title = 'Are you sure?', message = 'Do you want to delete this item?', confirmLabel = 'Delete', onConfirm }) {
+            pendingConfirmAction = onConfirm || null;
+            const titleEl = document.getElementById('confirm-modal-title');
+            const msgEl = document.getElementById('confirm-modal-message');
+            const btnEl = document.getElementById('confirm-modal-accept-btn');
+            if (titleEl) titleEl.textContent = title;
+            if (msgEl) msgEl.textContent = message;
+            if (btnEl) btnEl.textContent = confirmLabel;
+            openModal('confirm-action-modal');
+        }
+
+        function closeConfirmDialog() {
+            pendingConfirmAction = null;
+            closeModal('confirm-action-modal');
+        }
+
+        function executeConfirmedAction() {
+            const fn = pendingConfirmAction;
+            closeConfirmDialog();
+            if (typeof fn === 'function') fn();
         }
 
         function openStructureInfoModal(structureName, e) {
@@ -6383,23 +6477,22 @@
                 return;
             }
             const target = getActiveEquipmentProfile();
-            if (!window._confirmDeleteProfilePending) {
-                window._confirmDeleteProfilePending = true;
-                showToast(`Tap the trash icon again to confirm deleting "${target.name}".`);
-                clearTimeout(window._confirmDeleteProfileTimer);
-                window._confirmDeleteProfileTimer = setTimeout(() => { window._confirmDeleteProfilePending = false; }, 3500);
-                return;
-            }
-            window._confirmDeleteProfilePending = false;
-            equipmentProfiles = equipmentProfiles.filter(p => p.id !== activeEquipmentProfileId);
-            activeEquipmentProfileId = equipmentProfiles[0].id;
-            isEditingProfileName = false;
-            persistState();
-            updateHeaderEquipmentBadge();
-            renderEquipmentPrefsModal();
-            if (activeTab === 'exercises') renderExercises();
-            if (activeTab === 'routines') renderRoutines();
-            showToast(`Deleted "${target.name}"`);
+            openConfirmDialog({
+                title: 'Delete Equipment Profile?',
+                message: `Are you sure you want to delete the "${target.name}" profile?`,
+                confirmLabel: 'Delete',
+                onConfirm: () => {
+                    equipmentProfiles = equipmentProfiles.filter(p => p.id !== activeEquipmentProfileId);
+                    activeEquipmentProfileId = equipmentProfiles[0].id;
+                    isEditingProfileName = false;
+                    persistState();
+                    updateHeaderEquipmentBadge();
+                    renderEquipmentPrefsModal();
+                    if (activeTab === 'exercises') renderExercises();
+                    if (activeTab === 'routines') renderRoutines();
+                    showToast(`Deleted "${target.name}"`);
+                }
+            });
         }
 
         function setEquipmentPreference(equipment, state) {
@@ -6610,17 +6703,16 @@
         }
 
         function confirmRemoveRoutineFromSchedule(routineId, dayKey) {
-            const key = `${dayKey}_${routineId}`;
-            if (window._confirmSchedRemoveKey !== key) {
-                window._confirmSchedRemoveKey = key;
-                showToast('Tap X again to confirm removing from schedule.');
-                clearTimeout(window._confirmSchedRemoveTimer);
-                window._confirmSchedRemoveTimer = setTimeout(() => { window._confirmSchedRemoveKey = null; }, 3500);
-                return;
-            }
-            window._confirmSchedRemoveKey = null;
-            toggleRoutineScheduleDay(routineId, dayKey);
-            showToast('Removed routine from schedule.');
+            const routine = routines.find(r => r.id === routineId);
+            openConfirmDialog({
+                title: 'Remove Scheduled Routine?',
+                message: `Are you sure you want to remove "${routine ? routine.name : 'this routine'}" from your schedule?`,
+                confirmLabel: 'Remove',
+                onConfirm: () => {
+                    toggleRoutineScheduleDay(routineId, dayKey);
+                    showToast('Removed routine from schedule.');
+                }
+            });
         }
 
         function onScheduleDragStart(e, idx) {
@@ -6873,10 +6965,7 @@
                     <div onclick="openRoutinePreview('${r.id}')" class="bg-slate-900 border border-slate-800 rounded-2xl p-4 space-y-2.5 cursor-pointer transition">
                         <div class="flex items-start justify-between gap-2">
                             <div class="min-w-0 flex-1 space-y-1.5">
-                                <div class="flex items-center gap-2 flex-wrap">
-                                    <h3 class="text-sm font-extrabold text-white">${r.name}</h3>
-                                    <span class="text-[11px] font-semibold text-slate-400">• ${effectiveEx.length} exercise${effectiveEx.length === 1 ? '' : 's'}</span>
-                                </div>
+                                <h3 class="text-sm font-extrabold text-white">${r.name}</h3>
                                 <div class="flex items-center gap-1.5 flex-wrap">
                                     <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full inline-flex items-center justify-center text-center ${getDifficultyBadgeClass(rDiff)}">${getDifficultyLabel(rDiff)}</span>
                                     <button type="button" onclick="openStructureInfoModal('${structureName}', event)"
@@ -6884,6 +6973,7 @@
                                         <span>${structureName}</span>
                                         <i data-lucide="help-circle" class="w-2.5 h-2.5 text-purple-300"></i>
                                     </button>
+                                    <span class="text-[11px] font-semibold text-slate-400">• ${effectiveEx.length} exercise${effectiveEx.length === 1 ? '' : 's'}</span>
                                     ${autoSwappedCount > 0 ? `<span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-300">${autoSwappedCount} auto-adapted</span>` : ''}
                                 </div>
                             </div>
@@ -8186,9 +8276,16 @@
             const btn = document.getElementById('breath-start-btn');
 
             if (cd) cd.textContent = breathState.remainingSec;
-            if (phaseEl) phaseEl.textContent = breathState.running ? cur.label.toUpperCase() : 'READY';
+            if (phaseEl) {
+                if (breathState.running) {
+                    phaseEl.textContent = cur.label.toUpperCase();
+                    phaseEl.classList.remove('hidden');
+                } else {
+                    phaseEl.classList.add('hidden');
+                }
+            }
             if (orb) {
-                orb.className = `w-16 h-16 rounded-full bg-cyan-500/20 border-2 border-cyan-400 flex items-center justify-center transition-all duration-700 ${breathState.running ? cur.scale : 'scale-100'}`;
+                orb.className = `w-14 h-14 rounded-full bg-cyan-500/20 border-2 border-cyan-400 flex items-center justify-center transition-all duration-700 ${breathState.running ? cur.scale : 'scale-100'}`;
             }
             if (cycleEl) {
                 const summary = breathState.phases.map(p => `${p.sec}s ${p.label}`).join(' / ');
@@ -8196,8 +8293,8 @@
             }
             if (btn) {
                 btn.innerHTML = breathState.running
-                    ? `<i data-lucide="pause" class="w-3.5 h-3.5"></i> Pause`
-                    : `<i data-lucide="play" class="w-3.5 h-3.5"></i> Breathe`;
+                    ? `<i data-lucide="pause" class="w-4 h-4"></i>`
+                    : `<i data-lucide="play" class="w-4 h-4"></i>`;
             }
             lucide.createIcons();
         }
@@ -8232,18 +8329,24 @@
                 renderYogaFlowStage();
                 return;
             }
+            startYogaHoldCountdown();
+        }
+
+        function startYogaHoldCountdown() {
+            if (!activeWorkout || !activeWorkout.exercises.length) return;
             yogaHoldRunning = true;
             playToneCue(528, 0.18, 'sine', 0);
-            const curItem = activeWorkout?.exercises[focusExerciseIndex];
+            const curItem = activeWorkout.exercises[focusExerciseIndex];
             const curEx = curItem ? exercises.find(e => e.id === curItem.exerciseId) : null;
             if (curEx) announceTimerCue(`Hold ${curEx.name} for ${yogaHoldRemainingSec} seconds.`, true);
 
             clearInterval(yogaHoldInterval);
             yogaHoldInterval = setInterval(() => {
                 yogaHoldRemainingSec--;
+                const activeItem = activeWorkout?.exercises[focusExerciseIndex];
+                const activeEx = activeItem ? exercises.find(e => e.id === activeItem.exerciseId) : null;
                 const half = Math.floor(yogaHoldInitialSec / 2);
-                // Only announce switching sides if the current exercise is unilateral!
-                if (curEx && curEx.unilateral && !yogaHalfwayNotified && yogaHoldRemainingSec === half && half >= 10) {
+                if (activeEx && activeEx.unilateral && !yogaHalfwayNotified && yogaHoldRemainingSec === half && half >= 10) {
                     yogaHalfwayNotified = true;
                     playMultiBeep([[660, 0.14, 0], [880, 0.18, 0.18]]);
                     announceTimerCue('Halfway. Switch sides smoothly.', true);
@@ -8252,8 +8355,7 @@
                 if (yogaHoldRemainingSec <= 0) {
                     stopYogaHoldTimer();
                     playMultiBeep([[528, 0.15, 0], [660, 0.25, 0.18]]);
-                    announceTimerCue('Pose complete. Transition smoothly to the next movement.', true);
-                    completeCurrentYogaPose();
+                    completeCurrentYogaPose(true);
                     return;
                 }
                 renderYogaFlowStage();
@@ -8267,7 +8369,7 @@
             yogaHoldRunning = false;
         }
 
-        function completeCurrentYogaPose() {
+        function completeCurrentYogaPose(autoContinue = false) {
             stopYogaHoldTimer();
             if (!activeWorkout || !activeWorkout.exercises[focusExerciseIndex]) return;
             const item = activeWorkout.exercises[focusExerciseIndex];
@@ -8278,9 +8380,14 @@
                 focusExerciseIndex++;
                 renderActiveWorkout();
             }
-            if (yogaFlowMode && activeWorkout && activeWorkout.exercises[focusExerciseIndex]) {
+
+            const allDone = activeWorkout.exercises.every(exItem => exItem.sets.length > 0 && exItem.sets.every(s => s.done));
+            if (yogaFlowMode && activeWorkout && !allDone && activeWorkout.exercises[focusExerciseIndex]) {
                 loadYogaPoseForExercise(focusExerciseIndex);
                 renderYogaFlowStage();
+                if (autoContinue) {
+                    startYogaHoldCountdown();
+                }
             }
         }
 
@@ -8317,8 +8424,8 @@
             const btn = document.getElementById('yoga-timer-toggle-btn');
             if (btn) {
                 btn.innerHTML = yogaHoldRunning
-                    ? `<i data-lucide="pause" class="w-3.5 h-3.5"></i> Pause`
-                    : `<i data-lucide="play" class="w-3.5 h-3.5"></i> Hold`;
+                    ? `<i data-lucide="pause" class="w-4 h-4"></i>`
+                    : `<i data-lucide="play" class="w-4 h-4"></i>`;
             }
 
             document.getElementById('yoga-pose-steps').innerHTML = (ex.steps || [])
@@ -8497,16 +8604,20 @@
 
             if (!badge || !clock) return;
 
-            const phaseStyles = {
-                ready: { text: 'READY', cls: 'bg-purple-500/20 text-purple-300' },
-                countdown: { text: 'GET READY', cls: 'bg-amber-500/20 text-amber-300' },
-                work: { text: 'WORK', cls: 'bg-emerald-500/20 text-emerald-300' },
-                rest: { text: 'REST', cls: 'bg-sky-500/20 text-sky-300' },
-                done: { text: 'COMPLETE', cls: 'bg-brand-500/20 text-brand-300' }
-            };
-            const st = phaseStyles[tabataState.phase] || phaseStyles.ready;
-            badge.textContent = st.text;
-            badge.className = `text-[11px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full ${st.cls}`;
+            if (tabataState.phase === 'ready') {
+                badge.innerHTML = `<i data-lucide="repeat" class="w-3.5 h-3.5"></i>`;
+                badge.className = 'w-7 h-7 rounded-full bg-purple-500/20 text-purple-300 inline-flex items-center justify-center';
+            } else {
+                const phaseStyles = {
+                    countdown: { text: 'GET READY', cls: 'bg-amber-500/20 text-amber-300' },
+                    work: { text: 'WORK', cls: 'bg-emerald-500/20 text-emerald-300' },
+                    rest: { text: 'REST', cls: 'bg-sky-500/20 text-sky-300' },
+                    done: { text: 'COMPLETE', cls: 'bg-brand-500/20 text-brand-300' }
+                };
+                const st = phaseStyles[tabataState.phase] || phaseStyles.countdown;
+                badge.textContent = st.text;
+                badge.className = `text-[11px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full ${st.cls}`;
+            }
 
             if (roundLabel) roundLabel.textContent = `Round ${tabataState.currentRound} of ${tabataState.totalRounds}`;
             const mins = String(Math.floor(tabataState.remainingSec / 60)).padStart(2, '0');
@@ -8520,8 +8631,8 @@
 
             if (startBtn) {
                 startBtn.innerHTML = tabataState.running
-                    ? `<i data-lucide="pause" class="w-3.5 h-3.5"></i> Pause`
-                    : `<i data-lucide="play" class="w-3.5 h-3.5"></i> Start`;
+                    ? `<i data-lucide="pause" class="w-4 h-4"></i>`
+                    : `<i data-lucide="play" class="w-4 h-4"></i>`;
             }
             lucide.createIcons();
         }
@@ -8630,10 +8741,16 @@
                 const uniqueVoices = [];
                 const seen = new Set();
                 enVoices.forEach(v => {
-                    const cleanName = v.name.replace(/Microsoft |Google |Apple /g, '').split('(')[0].trim();
-                    if (!seen.has(cleanName) && uniqueVoices.length < 8) {
+                    const uri = v.voiceURI || v.name;
+                    const cleanName = v.name
+                        .replace(/Microsoft |Google |Apple |Android Speech Recognition and Synthesis from Google /gi, '')
+                        .replace(/\(.*\)/g, '')
+                        .trim() || v.name;
+                    const label = seen.has(cleanName) ? `${cleanName} (${v.lang})` : cleanName;
+                    if (!seen.has(uri) && uniqueVoices.length < 12) {
+                        seen.add(uri);
                         seen.add(cleanName);
-                        uniqueVoices.push({ value: `sys:${v.name}`, label: cleanName });
+                        uniqueVoices.push({ value: `sys:${uri}`, label });
                     }
                 });
                 sysOptions = uniqueVoices;
@@ -8682,14 +8799,14 @@
 
         function getPreferredNaturalVoice() {
             if (!('speechSynthesis' in window)) return null;
-            const voices = window.speechSynthesis.getVoices();
-            if (!voices || !voices.length) return null;
+            const voices = window.speechSynthesis.getVoices() || [];
+            if (!voices.length) return null;
             const enVoices = voices.filter(v => v.lang && v.lang.toLowerCase().startsWith('en'));
             const pool = enVoices.length ? enVoices : voices;
 
             if (voiceCoachStyle && voiceCoachStyle.startsWith('sys:')) {
-                const exactName = voiceCoachStyle.slice(4);
-                const exact = voices.find(v => v.name === exactName);
+                const exactId = voiceCoachStyle.slice(4);
+                const exact = voices.find(v => v.voiceURI === exactId || v.name === exactId);
                 if (exact) return exact;
             }
 
@@ -8713,10 +8830,17 @@
             try {
                 window.speechSynthesis.cancel();
                 const utter = new SpeechSynthesisUtterance(text);
+                const isDeviceVoice = voiceCoachStyle && voiceCoachStyle.startsWith('sys:');
                 const voice = getPreferredNaturalVoice();
-                if (voice) utter.voice = voice;
+                if (voice) {
+                    utter.voice = voice;
+                    utter.lang = voice.lang || 'en-US';
+                }
 
-                if (voiceCoachStyle === 'energetic') {
+                if (isDeviceVoice) {
+                    utter.rate = 1.0;
+                    utter.pitch = 1.0;
+                } else if (voiceCoachStyle === 'energetic') {
                     utter.rate = 1.07;
                     utter.pitch = 1.12;
                 } else if (voiceCoachStyle === 'calm') {
@@ -8863,13 +8987,13 @@
             if (activeDisplayMode === 'focus') {
                 if (fullViewBtn) {
                     fullViewBtn.textContent = 'Current';
-                    fullViewBtn.className = 'px-2.5 py-1.5 rounded-full bg-slate-950 text-slate-300 text-[11px] font-bold transition';
+                    fullViewBtn.className = 'w-[72px] py-1.5 rounded-full bg-slate-950 text-slate-300 text-[11px] font-bold text-center transition';
                 }
                 focusNav.classList.remove('hidden');
             } else {
                 if (fullViewBtn) {
                     fullViewBtn.textContent = 'Full';
-                    fullViewBtn.className = 'px-2.5 py-1.5 rounded-full bg-brand-600 text-white text-[11px] font-bold transition';
+                    fullViewBtn.className = 'w-[72px] py-1.5 rounded-full bg-brand-600 text-white text-[11px] font-bold text-center transition';
                 }
                 focusNav.classList.add('hidden');
             }
@@ -8942,6 +9066,7 @@
             }
 
             populateVoiceStyleOptions();
+            applyActiveCardsOrder();
             renderTabataUI();
             renderYogaFlowStage();
 
@@ -9036,13 +9161,23 @@
 
                 return `
                     <div id="active-ex-card-${exIdx}" onclick="openExerciseDetail('${ex.id}')"
+                        draggable="true"
+                        ondragstart="onActiveExerciseDragStart(event, ${exIdx})"
+                        ondragover="onActiveExerciseDragOver(event)"
+                        ondragleave="onActiveExerciseDragLeave(event)"
+                        ondrop="onActiveExerciseDrop(event, ${exIdx})"
                         class="bg-slate-900 border ${allSetsDone ? 'border-emerald-700/60' : 'border-slate-800'} rounded-2xl p-3.5 space-y-3 cursor-pointer transition">
                         <div class="flex items-start justify-between gap-2">
-                            <div class="min-w-0 flex-1 space-y-1">
-                                <h3 class="text-sm font-extrabold text-white">${ex.name}</h3>
-                                <div class="flex items-center gap-1.5 flex-wrap">
-                                    <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full inline-flex items-center justify-center text-center ${getDifficultyBadgeClass(ex.difficulty)}">${getDifficultyLabel(ex.difficulty)}</span>
-                                    <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-sky-500/15 text-sky-300">${ex.equipment}</span>
+                            <div class="flex items-start gap-2 min-w-0 flex-1">
+                                <span onclick="event.stopPropagation()" class="text-slate-500 cursor-grab active:cursor-grabbing mt-0.5 shrink-0" title="Drag to reorder exercise">
+                                    <i data-lucide="grip-vertical" class="w-4 h-4"></i>
+                                </span>
+                                <div class="min-w-0 flex-1 space-y-1">
+                                    <h3 class="text-sm font-extrabold text-white">${ex.name}</h3>
+                                    <div class="flex items-center gap-1.5 flex-wrap">
+                                        <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full inline-flex items-center justify-center text-center ${getDifficultyBadgeClass(ex.difficulty)}">${getDifficultyLabel(ex.difficulty)}</span>
+                                        <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-sky-500/15 text-sky-300">${ex.equipment}</span>
+                                    </div>
                                 </div>
                             </div>
                             <div class="flex items-center gap-1 shrink-0" onclick="event.stopPropagation()">
@@ -9077,6 +9212,86 @@
             }).join('');
 
             lucide.createIcons();
+        }
+
+        function applyActiveCardsOrder() {
+            const stack = document.getElementById('active-cards-stack');
+            if (!stack) return;
+            activeCardOrder.forEach(cardId => {
+                const el = stack.querySelector(`[data-card-id="${cardId}"]`);
+                if (el) stack.appendChild(el);
+            });
+        }
+
+        function onActiveCardDragStart(e, cardId) {
+            if (draggedActiveExerciseIdx !== null) return;
+            draggedActiveCardId = cardId;
+            if (e.dataTransfer) {
+                e.dataTransfer.effectAllowed = 'move';
+                e.dataTransfer.setData('text/plain', cardId);
+            }
+        }
+
+        function onActiveCardDragOver(e) {
+            if (!draggedActiveCardId) return;
+            e.preventDefault();
+            e.currentTarget.classList.add('drag-over-card');
+        }
+
+        function onActiveCardDragLeave(e) {
+            e.currentTarget.classList.remove('drag-over-card');
+        }
+
+        function onActiveCardDrop(e, targetCardId) {
+            e.currentTarget.classList.remove('drag-over-card');
+            if (!draggedActiveCardId || draggedActiveCardId === targetCardId) {
+                draggedActiveCardId = null;
+                return;
+            }
+            e.preventDefault();
+            e.stopPropagation();
+            const fromIdx = activeCardOrder.indexOf(draggedActiveCardId);
+            const toIdx = activeCardOrder.indexOf(targetCardId);
+            if (fromIdx >= 0 && toIdx >= 0) {
+                const [moved] = activeCardOrder.splice(fromIdx, 1);
+                activeCardOrder.splice(toIdx, 0, moved);
+                applyActiveCardsOrder();
+            }
+            draggedActiveCardId = null;
+        }
+
+        function onActiveExerciseDragStart(e, exIdx) {
+            e.stopPropagation();
+            draggedActiveExerciseIdx = exIdx;
+            draggedActiveCardId = null;
+            if (e.dataTransfer) {
+                e.dataTransfer.effectAllowed = 'move';
+                e.dataTransfer.setData('text/plain', String(exIdx));
+            }
+        }
+
+        function onActiveExerciseDragOver(e) {
+            if (draggedActiveExerciseIdx === null) return;
+            e.preventDefault();
+            e.stopPropagation();
+            e.currentTarget.classList.add('drag-over-card');
+        }
+
+        function onActiveExerciseDragLeave(e) {
+            e.currentTarget.classList.remove('drag-over-card');
+        }
+
+        function onActiveExerciseDrop(e, targetExIdx) {
+            e.currentTarget.classList.remove('drag-over-card');
+            if (draggedActiveExerciseIdx === null || !activeWorkout) return;
+            e.preventDefault();
+            e.stopPropagation();
+            if (draggedActiveExerciseIdx !== targetExIdx) {
+                const [moved] = activeWorkout.exercises.splice(draggedActiveExerciseIdx, 1);
+                activeWorkout.exercises.splice(targetExIdx, 0, moved);
+                renderActiveWorkout();
+            }
+            draggedActiveExerciseIdx = null;
         }
 
         function updateActiveSetVal(exIdx, sIdx, field, val) {
@@ -9183,8 +9398,18 @@
 
         function removeActiveExercise(exIdx) {
             if (!activeWorkout) return;
-            activeWorkout.exercises.splice(exIdx, 1);
-            renderActiveWorkout();
+            const item = activeWorkout.exercises[exIdx];
+            const ex = item ? exercises.find(e => e.id === item.exerciseId) : null;
+            openConfirmDialog({
+                title: 'Remove Exercise?',
+                message: `Are you sure you want to remove "${ex ? ex.name : 'this exercise'}" from your current workout?`,
+                confirmLabel: 'Remove',
+                onConfirm: () => {
+                    if (!activeWorkout) return;
+                    activeWorkout.exercises.splice(exIdx, 1);
+                    renderActiveWorkout();
+                }
+            });
         }
 
         function scaleActiveExercise(exIdx, direction) {
@@ -9297,25 +9522,24 @@
 
         function cancelWorkout() {
             if (!activeWorkout) return;
-            if (!window._confirmDiscardPending) {
-                window._confirmDiscardPending = true;
-                showToast('Tap the trash icon again to confirm discarding this workout.');
-                clearTimeout(window._confirmDiscardTimer);
-                window._confirmDiscardTimer = setTimeout(() => { window._confirmDiscardPending = false; }, 3500);
-                return;
-            }
-            window._confirmDiscardPending = false;
-            clearInterval(timerInterval);
-            stopTabataInterval();
-            stopYogaHoldTimer();
-            stopBreathInterval();
-            activeWorkout = null;
-            elapsedSeconds = 0;
-            isWorkoutPaused = false;
-            yogaFlowMode = false;
-            document.getElementById('active-dot').classList.add('hidden');
-            renderActiveWorkout();
-            showToast('Active session discarded.');
+            openConfirmDialog({
+                title: 'Discard Workout?',
+                message: 'Are you sure you want to discard this active workout session? Your logged sets will not be saved.',
+                confirmLabel: 'Discard',
+                onConfirm: () => {
+                    clearInterval(timerInterval);
+                    stopTabataInterval();
+                    stopYogaHoldTimer();
+                    stopBreathInterval();
+                    activeWorkout = null;
+                    elapsedSeconds = 0;
+                    isWorkoutPaused = false;
+                    yogaFlowMode = false;
+                    document.getElementById('active-dot').classList.add('hidden');
+                    renderActiveWorkout();
+                    showToast('Active session discarded.');
+                }
+            });
         }
 
         // ==========================================
@@ -9539,15 +9763,22 @@
         function deleteCustomRoutine(routineId) {
             const target = routines.find(r => r.id === routineId);
             if (!target) return;
-            routines = routines.filter(r => r.id !== routineId);
-            favoriteRoutines = favoriteRoutines.filter(id => id !== routineId);
-            Object.keys(weeklySchedule).forEach(day => {
-                weeklySchedule[day] = (weeklySchedule[day] || []).filter(id => id !== routineId);
+            openConfirmDialog({
+                title: 'Delete Custom Routine?',
+                message: `Are you sure you want to delete "${target.name}"?`,
+                confirmLabel: 'Delete',
+                onConfirm: () => {
+                    routines = routines.filter(r => r.id !== routineId);
+                    favoriteRoutines = favoriteRoutines.filter(id => id !== routineId);
+                    Object.keys(weeklySchedule).forEach(day => {
+                        weeklySchedule[day] = (weeklySchedule[day] || []).filter(id => id !== routineId);
+                    });
+                    persistState();
+                    renderWeeklySchedule();
+                    renderRoutines();
+                    showToast(`Deleted routine "${target.name}"`);
+                }
             });
-            persistState();
-            renderWeeklySchedule();
-            renderRoutines();
-            showToast(`Deleted routine "${target.name}"`);
         }
 
         function saveCustomRoutine() {
@@ -9649,11 +9880,18 @@
         function deleteCustomExercise(exId) {
             const target = exercises.find(e => e.id === exId);
             if (!target) return;
-            exercises = exercises.filter(e => e.id !== exId);
-            favoriteExercises = favoriteExercises.filter(id => id !== exId);
-            persistState();
-            renderExercises();
-            showToast(`Deleted exercise "${target.name}"`);
+            openConfirmDialog({
+                title: 'Delete Custom Exercise?',
+                message: `Are you sure you want to delete "${target.name}"?`,
+                confirmLabel: 'Delete',
+                onConfirm: () => {
+                    exercises = exercises.filter(e => e.id !== exId);
+                    favoriteExercises = favoriteExercises.filter(id => id !== exId);
+                    persistState();
+                    renderExercises();
+                    showToast(`Deleted exercise "${target.name}"`);
+                }
+            });
         }
 
         function saveCustomExercise() {
@@ -10206,10 +10444,18 @@
         }
 
         function deleteHistorySession(sessionId) {
-            workoutHistory = workoutHistory.filter(w => w.id !== sessionId);
-            persistState();
-            renderProgressDashboard();
-            showToast('Workout deleted from history.');
+            const target = workoutHistory.find(w => w.id === sessionId);
+            openConfirmDialog({
+                title: 'Delete Completed Session?',
+                message: `Are you sure you want to delete "${target ? target.title : 'this workout'}" from your history?`,
+                confirmLabel: 'Delete',
+                onConfirm: () => {
+                    workoutHistory = workoutHistory.filter(w => w.id !== sessionId);
+                    persistState();
+                    renderProgressDashboard();
+                    showToast('Workout deleted from history.');
+                }
+            });
         }
 
         function openEditHistoryModal(sessionId) {
