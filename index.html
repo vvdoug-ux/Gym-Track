@@ -591,11 +591,11 @@
                                 class="pl-2.5 pr-1.5 py-1.5 text-[11px] font-bold text-slate-400 flex items-center justify-center transition">
                                 <i data-lucide="volume-x" class="w-3.5 h-3.5"></i>
                             </button>
-                            <button id="voice-coach-style-btn" type="button" onclick="toggleVoiceStyleMenu()" title="Voice Coach Sound"
-                                class="pr-2.5 pl-1 py-1.5 text-[11px] font-bold text-slate-300 max-w-[125px] truncate transition">
-                                <span id="voice-coach-style-label">Natural Coach</span>
+                            <button id="voice-coach-style-btn" type="button" onclick="toggleVoiceStyleMenu()" title="Device Voice"
+                                class="pr-2.5 pl-1 py-1.5 text-[11px] font-bold text-slate-300 max-w-[135px] truncate transition">
+                                <span id="voice-coach-style-label">Device Voice</span>
                             </button>
-                            <div id="voice-coach-menu" class="hidden absolute left-0 top-full mt-1.5 w-44 max-h-56 overflow-y-auto bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl z-30 p-1 space-y-0.5"></div>
+                            <div id="voice-coach-menu" class="hidden absolute left-0 top-full mt-1.5 w-48 max-h-56 overflow-y-auto bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl z-30 p-1 space-y-0.5"></div>
                         </div>
 
                         <div id="time-callout-wrapper" class="relative inline-flex items-center overflow-visible">
@@ -5991,7 +5991,7 @@
         let autoAdvanceMode = 'all_sets';
         let lastNonZeroAutoAdvanceMode = 'all_sets';
         let voiceCoachEnabled = false;
-        let voiceCoachStyle = 'natural';
+        let voiceCoachStyle = '';
         let timeCalloutIntervalSec = 0;
         let lastNonZeroCalloutSec = 30;
         let focusExerciseIndex = 0;
@@ -8735,29 +8735,21 @@
             const menuEl = document.getElementById('voice-coach-menu');
             const labelEl = document.getElementById('voice-coach-style-label');
 
-            const presets = [
-                { value: 'natural', label: 'Natural Coach' },
-                { value: 'female', label: 'Female Voice' },
-                { value: 'male', label: 'Male Voice' },
-                { value: 'energetic', label: 'Energetic' },
-                { value: 'calm', label: 'Calm Guide' },
-                { value: 'deep', label: 'Deep & Steady' }
-            ];
-
             let sysOptions = [];
             if ('speechSynthesis' in window) {
                 const voices = window.speechSynthesis.getVoices() || [];
                 const enVoices = voices.filter(v => v.lang && v.lang.toLowerCase().startsWith('en'));
+                const pool = enVoices.length ? enVoices : voices;
                 const uniqueVoices = [];
                 const seen = new Set();
-                enVoices.forEach(v => {
+                pool.forEach(v => {
                     const uri = v.voiceURI || v.name;
                     const cleanName = v.name
                         .replace(/Microsoft |Google |Apple |Android Speech Recognition and Synthesis from Google /gi, '')
                         .replace(/\(.*\)/g, '')
                         .trim() || v.name;
                     const label = seen.has(cleanName) ? `${cleanName} (${v.lang})` : cleanName;
-                    if (!seen.has(uri) && uniqueVoices.length < 12) {
+                    if (!seen.has(uri) && uniqueVoices.length < 20) {
                         seen.add(uri);
                         seen.add(cleanName);
                         uniqueVoices.push({ value: `sys:${uri}`, label });
@@ -8766,28 +8758,28 @@
                 sysOptions = uniqueVoices;
             }
 
-            const allItems = [...presets, ...sysOptions];
-            const activeItem = allItems.find(i => i.value === voiceCoachStyle) || presets[0];
-            if (!allItems.some(i => i.value === voiceCoachStyle)) {
-                voiceCoachStyle = 'natural';
+            if (!sysOptions.length) {
+                if (labelEl) labelEl.textContent = 'Default Voice';
+                if (menuEl) {
+                    menuEl.innerHTML = `<div class="px-3 py-2 text-xs text-slate-400">No device voices available</div>`;
+                }
+                return;
+            }
+
+            const activeItem = sysOptions.find(i => i.value === voiceCoachStyle) || sysOptions[0];
+            if (!sysOptions.some(i => i.value === voiceCoachStyle)) {
+                voiceCoachStyle = activeItem.value;
             }
             if (labelEl) labelEl.textContent = activeItem.label;
 
             if (menuEl) {
-                const renderGroup = (title, items) => `
-                    <div class="pt-0.5">
-                        <p class="px-2.5 py-1 text-[9px] font-extrabold uppercase tracking-wider text-slate-400">${title}</p>
-                        ${items.map(item => `
-                            <button type="button" onclick="selectVoiceCoachStyle('${item.value.replace(/'/g, "\\'")}')"
-                                class="w-full text-left px-3 py-1.5 rounded-xl text-xs font-bold text-slate-200 hover:bg-brand-600 hover:text-white flex items-center justify-between gap-2">
-                                <span class="truncate">${item.label}</span>
-                                ${item.value === voiceCoachStyle ? `<span class="text-emerald-400 text-[10px] shrink-0">✓</span>` : ''}
-                            </button>
-                        `).join('')}
-                    </div>
-                `;
-                menuEl.innerHTML = renderGroup('Coach Styles', presets)
-                    + (sysOptions.length ? renderGroup('Device Voices', sysOptions) : '');
+                menuEl.innerHTML = sysOptions.map(item => `
+                    <button type="button" onclick="selectVoiceCoachStyle('${item.value.replace(/'/g, "\\'")}')"
+                        class="w-full text-left px-3 py-1.5 rounded-xl text-xs font-bold text-slate-200 flex items-center justify-between gap-2">
+                        <span class="truncate">${item.label}</span>
+                        ${item.value === voiceCoachStyle ? `<span class="text-emerald-400 text-[10px] shrink-0">✓</span>` : ''}
+                    </button>
+                `).join('');
             }
         }
 
@@ -8820,19 +8812,7 @@
                 if (exact) return exact;
             }
 
-            if (voiceCoachStyle === 'male' || voiceCoachStyle === 'deep') {
-                return pool.find(v => /guy|daniel|david|mark|alex|george|arthur|james|thomas|male|en-us-x-iom|en-us-x-tpd|en-gb-x-rjs|en-gb-x-gbd/i.test(v.name + ' ' + (v.voiceURI || ''))) || pool[0];
-            }
-            if (voiceCoachStyle === 'female' || voiceCoachStyle === 'calm') {
-                return pool.find(v => /samantha|serena|victoria|moira|karen|aria|fiona|jenny|ava|allison|female|en-us-x-sfg|en-us-x-tpf|en-gb-x-gba|en-gb-x-gbc/i.test(v.name + ' ' + (v.voiceURI || ''))) || pool[0];
-            }
-            if (voiceCoachStyle === 'energetic') {
-                return pool.find(v => /jenny|ava|allison|google us english|natural|neural/i.test(v.name)) || pool[0];
-            }
-
-            return pool.find(v => /natural|neural|online|aria|jenny|guy|samantha|ava|allison|google us english|daniel|serena/i.test(v.name))
-                || pool.find(v => !v.localService)
-                || pool[0];
+            return pool[0];
         }
 
         function speakVoiceCue(text) {
@@ -8840,35 +8820,13 @@
             try {
                 window.speechSynthesis.cancel();
                 const utter = new SpeechSynthesisUtterance(text);
-                const isDeviceVoice = voiceCoachStyle && voiceCoachStyle.startsWith('sys:');
                 const voice = getPreferredNaturalVoice();
                 if (voice) {
                     utter.voice = voice;
                     utter.lang = voice.lang || 'en-US';
                 }
-
-                if (isDeviceVoice) {
-                    utter.rate = 1.0;
-                    utter.pitch = 1.0;
-                } else if (voiceCoachStyle === 'male') {
-                    utter.rate = 0.97;
-                    utter.pitch = 0.86;
-                } else if (voiceCoachStyle === 'female') {
-                    utter.rate = 0.98;
-                    utter.pitch = 1.14;
-                } else if (voiceCoachStyle === 'energetic') {
-                    utter.rate = 1.07;
-                    utter.pitch = 1.12;
-                } else if (voiceCoachStyle === 'calm') {
-                    utter.rate = 0.88;
-                    utter.pitch = 0.96;
-                } else if (voiceCoachStyle === 'deep') {
-                    utter.rate = 0.93;
-                    utter.pitch = 0.82;
-                } else {
-                    utter.rate = 0.96;
-                    utter.pitch = 1.03;
-                }
+                utter.rate = 1.0;
+                utter.pitch = 1.0;
 
                 window.speechSynthesis.speak(utter);
             } catch (err) {}
